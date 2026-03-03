@@ -20,6 +20,19 @@ backend/mvnw.cmd
 *.war
 *.ear
 
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+
+# Java
+target/
+
+
 # Node / React
 frontend/node_modules/
 frontend/dist/
@@ -32,3 +45,4 @@ frontend/.eslintcache
 # Antigravity artifacts (internal)
 .gemini/
 .agents/
+
