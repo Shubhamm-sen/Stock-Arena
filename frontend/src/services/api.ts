@@ -1,19 +1,9 @@
 import axios from 'axios';
 import { DebateRequest, DebateSummary, DebateStartResponse } from '../types';
 
-<<<<<<< HEAD
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/debates';
 
 console.info(`[API] Base URL configured as: ${API_BASE_URL}`);
-=======
-// Safely access Vite env variable (bypass TS issue)
-const API_BASE =
-  (import.meta as any).env?.VITE_API_BASE_URL ||
-  'https://stock-arena.onrender.com';
-
-// Final API base URL
-const API_BASE_URL = `${API_BASE}/api/debates`;
->>>>>>> d5b8bf2c8434404020954537c8d4c2476388e548
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

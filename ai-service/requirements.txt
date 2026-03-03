@@ -1,5 +1,5 @@
 langgraph
-langchain-google-genai
+langchain-groq
 fastapi
 uvicorn
 pydantic
