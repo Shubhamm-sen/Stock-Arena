@@ -12,6 +12,7 @@ com/stockarena/dto/DebateDTO$PricePoint$PricePointBuilder.class
 com/stockarena/dto/DebateDTO$PricePoint.class
 com/stockarena/config/CorsConfig.class
 com/stockarena/config/WebSocketConfig.class
+com/stockarena/service/OpenAIService$DebateResponse.class
 com/stockarena/dto/DebateDTO$ArgumentPoint$ArgumentPointBuilder.class
 com/stockarena/model/DebateRepository.class
 com/stockarena/dto/DebateDTO$StreamMessage.class

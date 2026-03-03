@@ -98,9 +98,19 @@ export default function App() {
         break;
 
       case 'JUDGE_START':
+        setPhase('judge');
+        setActiveTab('judge');
+        setStatusMsg('Judge deliberating final consensus...');
+        break;
+
       case 'JUDGE_CHUNK':
+        setJudgeText(prev => prev + msg.content);
+        break;
+
       case 'JUDGE_DONE':
-        // Skip Judge phase in UI
+        setJudgeDone(true);
+        if (msg.content) setJudgeText(msg.content);
+        setStatusMsg('');
         break;
 
       case 'DEBATE_COMPLETE':
@@ -199,9 +209,10 @@ export default function App() {
                   { key: 'fetching', label: 'RESEARCH', icon: <Database className="w-3.5 h-3.5" /> },
                   { key: 'bull', label: 'BULL', icon: <TrendingUp className="w-3.5 h-3.5" /> },
                   { key: 'bear', label: 'BEAR', icon: <TrendingDown className="w-3.5 h-3.5" /> },
+                  { key: 'judge', label: 'CONSENSUS', icon: <Scale className="w-3.5 h-3.5" /> },
                   { key: 'complete', label: 'INSIGHTS', icon: <CheckCircle className="w-3.5 h-3.5" /> },
                 ].map((step, idx, arr) => {
-                  const phases = ['fetching', 'bull', 'bear', 'complete'];
+                  const phases = ['fetching', 'bull', 'bear', 'judge', 'complete'];
                   const isActive = step.key === activeTab;
                   const isPast = phases.indexOf(step.key) <= phases.indexOf(phase) && step.key !== 'idle';
                   const isAvailable = (isPast || step.key === phase || (phase === 'complete' && step.key === 'complete')) && phase !== 'idle';
@@ -234,7 +245,7 @@ export default function App() {
             </div>
 
             {/* Stock Glance info (Persistent Research Data) */}
-            {stockData && ['fetching', 'bull', 'bear'].includes(activeTab) && (
+            {stockData && ['fetching', 'bull', 'bear', 'judge'].includes(activeTab) && (
               <div className="animate-in fade-in duration-1000">
                 <StockCard stockData={stockData} />
               </div>
@@ -256,7 +267,7 @@ export default function App() {
                 </div>
               )}
 
-              {/* STREAMING phase (Fetching, Bull, Bear) */}
+              {/* STREAMING phase (Fetching, Bull, Bear, Judge) */}
               {phase !== 'idle' && activeTab !== 'complete' && activeTab !== 'fetching' && phase !== 'error' && (
                 <div className="grid grid-cols-1 gap-4 animate-in fade-in">
                   {(activeTab as string === 'bull' || (phase === 'bull' && activeTab === 'bull')) && (
@@ -275,6 +286,15 @@ export default function App() {
                       phase={phase}
                       isActive={phase === 'bear'}
                       isDone={bearDone}
+                    />
+                  )}
+                  {(activeTab as string === 'judge' || (phase === 'judge' && activeTab === 'judge')) && (
+                    <AgentPanel
+                      type="JUDGE"
+                      text={judgeText}
+                      phase={phase}
+                      isActive={phase === 'judge'}
+                      isDone={judgeDone}
                     />
                   )}
                 </div>
