@@ -2,17 +2,18 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8.0
+    image: postgres:15-alpine
     container_name: stockarena-db
     environment:
-      MYSQL_ROOT_PASSWORD: admin@123
-      MYSQL_DATABASE: stockCheck
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stockarena
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,10 +25,10 @@ services:
       - "8080:8080"
     environment:
       - DB_HOST=db
-      - DB_PORT=3306
-      - DB_NAME=stockCheck
-      - DB_USER=root
-      - DB_PASSWORD=admin@123
+      - DB_PORT=5432
+      - DB_NAME=stockarena
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_MODEL=gpt-4o
       - AI_SERVICE_URL=http://ai-service:8000
@@ -54,4 +55,4 @@ services:
       - backend
 
 volumes:
-  mysql-data:
+  postgres-data:

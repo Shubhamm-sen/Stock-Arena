@@ -36,7 +36,11 @@ export function useWebSocket(): UseWebSocketReturn {
     // Create new STOMP client
     const client = new Client({
       // SockJS provides the WebSocket transport with fallbacks
-      webSocketFactory: () => new SockJS('/ws'),
+      webSocketFactory: () => {
+        const wsUrl = import.meta.env.VITE_WS_URL || '/ws';
+        console.info(`[WebSocket] Connecting to: ${wsUrl}`);
+        return new SockJS(wsUrl);
+      },
 
       onConnect: () => {
         console.log('WebSocket connected, subscribing to session:', sessionId);

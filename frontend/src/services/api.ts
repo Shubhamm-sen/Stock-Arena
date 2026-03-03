@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { DebateRequest, DebateSummary, DebateStartResponse } from '../types';
 
-const API_BASE_URL = '/api/debates';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/debates';
+
+console.info(`[API] Base URL configured as: ${API_BASE_URL}`);
 
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
