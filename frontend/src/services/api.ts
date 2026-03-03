@@ -1,18 +1,36 @@
 import axios from 'axios';
-import { DebateRequest, DebateSummary, DebateStartResponse } from '../types';
+import {
+  DebateRequest,
+  DebateSummary,
+  DebateStartResponse,
+} from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/debates';
+/**
+ * Backend Base URL
+ * - Uses Vercel environment variable if available
+ * - Falls back to Render production URL
+ */
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  'https://stock-arena.onrender.com';
 
-console.info(`[API] Base URL configured as: ${API_BASE_URL}`);
+console.info(`[API] Base URL configured as: ${API_BASE}`);
 
+/**
+ * Axios instance
+ * Final base URL becomes:
+ * https://stock-arena.onrender.com/api/debates
+ */
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE}/api/debates`,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Optional global error logger
+/**
+ * Global error interceptor
+ */
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -21,6 +39,9 @@ apiClient.interceptors.response.use(
   }
 );
 
+/**
+ * Debate API methods
+ */
 export const debateApi = {
   startDebate: async (
     request: DebateRequest
