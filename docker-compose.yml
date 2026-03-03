@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: stockarena-db
+    environment:
+      MYSQL_ROOT_PASSWORD: admin@123
+      MYSQL_DATABASE: stockCheck
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: stockarena-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=stockCheck
+      - DB_USER=root
+      - DB_PASSWORD=admin@123
+      - OPENAI_API_KEY=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
+      - OPENAI_MODEL=gpt-4o
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: stockarena-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql-data:
